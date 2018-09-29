@@ -4,9 +4,17 @@ from django.http import HttpResponse, JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
+from .OxCrawler import *
 def decodeNfce(link):
     # TODO: Put here the functions to use crawler
-    return {'hello': 'nfce', 'link': link}
+    ox = OxCrawler(link)
+    return {
+        'cnpj': ox.get_cnpj(), 
+        'emission_date': ox.get_emission_date(),
+        'values': ox.get_purchase_value(),
+        'total_value': ox.get_items_total_amount(),
+        'descriptions': ox.get_items_description(),
+    }
 
 class Nfce(View):
 
