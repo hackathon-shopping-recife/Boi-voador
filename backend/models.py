@@ -1,8 +1,7 @@
 from django.db import models
-
 # Create your models here.
 
-class back_cliente(models.Model):
+class cliente(models.Model):
     cpf = models.CharField(max_length=11)
     senha = models.CharField(max_length=30)
     endereco = models.CharField(max_length=50)
@@ -12,7 +11,7 @@ class back_cliente(models.Model):
 
 
 
-class back_compra(models.Model):
+class compra(models.Model):
     id_compra = models.IntegerField(default=0)
     id_comprador = models.IntegerField(default=0)
     cnpj = models.CharField(max_length=20)
