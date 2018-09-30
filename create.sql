@@ -21,7 +21,7 @@ CREATE TABLE "backend_compra" (
 	"cnpj" 			varchar (20) NOT NULL,
 	"valor"			decimal NOT NULL,
 	"qnt_itens"		integer NOT NULL,
-	"url"			varchar(200) NOT NULL UNIQUE,
+	"url"			varchar(500) NOT NULL UNIQUE,
 	"data_emissao" 	varchar(30) NOT NULL
 );
 

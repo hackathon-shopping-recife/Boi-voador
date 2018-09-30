@@ -17,7 +17,7 @@ class compra(models.Model): # TODO: show list of products and descriptions too
     valor = models.DecimalField(max_digits=19, decimal_places=2)
     qnt_itens = models.IntegerField(default=0) 
     data_emissao = models.DateTimeField('date published')
-    url = models.CharField(max_length=200, unique=True)
+    url = models.CharField(max_length=500, unique=True)
 
 class item(models.Model):
     descricao = models.CharField(max_length=30)

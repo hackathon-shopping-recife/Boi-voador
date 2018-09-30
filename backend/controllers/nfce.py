@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from backend.models import compra, item
 from .OxCrawler import *
+import json as libjson
 
 def decodeNfce(link):
     ox = OxCrawler(link)
@@ -47,8 +48,8 @@ class Nfce(View):
         return JsonResponse(json_array, safe=False)
 
     def post(self, request):
-        cpf = request.POST.get('cpf')
-        link = request.POST.get('link')
+        cpf = libjson.loads(request.body.decode('utf-8')).get('cpf')
+        link = libjson.loads(request.body.decode('utf-8')).get('link')
         if compra.objects.filter(url=link).exists():
             return JsonResponse({'error': 'link already used', 'code': 404 })
         json = decodeNfce(link)

@@ -71,6 +71,7 @@ export default class App extends React.Component {
     }
 
     handleBarCodeScanned = ({ type, data }) => {
+        var url = `${data}`;
         alert(`Bar code with type ${type} and data ${data} has been scanned!`);
         return fetch('http://10.98.4.116:8000/nfce/data/', {
             method: 'POST',
@@ -78,12 +79,9 @@ export default class App extends React.Component {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                cpf: 1,
-                link: data
-            }),
+            body: JSON.stringify({ cpf: 1, link: url })// (`{ cpf: 1, link: ${url} }`),
         })
-        .then((response => alert(`Sucess:,${JSON.stringify(response)}`)))
+        .then((response => alert(`url: ${url}, Sucess:,${JSON.stringify(response)}`)))
         .catch(error => alert(`Error:, ${error}`))
     }
 }
