@@ -4,7 +4,7 @@ from django.http import HttpResponse, JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
-from backend.models import compra
+from backend.models import compra, item
 from .OxCrawler import *
 
 def decodeNfce(link):
@@ -15,6 +15,7 @@ def decodeNfce(link):
         'qnt_values': sum(ox.get_items_total_amount()),
         'total_value': float(ox.get_total_value()),
         'descriptions': ox.get_items_description(),
+        'purchase_values': ox.get_purchase_value()
     }
 
 class Nfce(View):
@@ -30,13 +31,17 @@ class Nfce(View):
         compras = compra.objects.filter(id_comprador=cpf)
         json_array = []
         for i in compras:
+            if (item.objects.filter(compra=i).exists()):
+                print(item.objects.filter(compra=i))
+                print(list(item.objects.filter(compra=i)))
             json_array.append({
                 'id_da_compra': i.id,
                 'cpf_do_comprador': i.id_comprador,
                 'cnpj': i.cnpj,
                 'valor': float(i.valor),
                 'qnt_itens': i.qnt_itens,
-                'data_emissao': i.data_emissao
+                'data_emissao': i.data_emissao,
+                'items': [{'valor':i.valor, 'descricao': i.descricao} for i in item.objects.filter(compra=i)]
             })
 
         return JsonResponse(json_array, safe=False)
@@ -55,4 +60,9 @@ class Nfce(View):
             url=link,
             data_emissao=json.get('emission_date'))
         buy.save()
+
+        for desc, purc in zip(json.get('descriptions'), json.get('purchase_values')):
+            it = item(descricao=desc, valor=purc, compra=buy)
+            it.save()
+
         return JsonResponse(json)
