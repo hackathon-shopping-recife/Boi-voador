@@ -72,7 +72,7 @@ export default class App extends React.Component {
 
     handleBarCodeScanned = ({ type, data }) => {
         alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-        return fetch('http://10.98.4.116:8000/nfce/data', {
+        return fetch('http://10.98.4.116:8000/nfce/data/', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
