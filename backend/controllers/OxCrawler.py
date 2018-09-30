@@ -39,7 +39,7 @@ class OxCrawler(object):
     def get_items_total_amount(self):
         total_items = []
         for item in self.soup.find_all('indtot'):
-            total_items.append(item.get_text())
+            total_items.append(int(item.get_text()))
         return total_items
 
     def get_items_description(self):

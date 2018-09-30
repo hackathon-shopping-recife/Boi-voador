@@ -11,10 +11,11 @@ class cliente(models.Model):
 
 
 
-class compra(models.Model):
+class compra(models.Model): # TODO: show list of products and descriptions too
     id_compra = models.IntegerField(default=0)
     id_comprador = models.IntegerField(default=0)
     cnpj = models.CharField(max_length=20)
-    valor = models.IntegerField(default=0)
-    qnt_itens = models.IntegerField(default=0)
+    valor = models.IntegerField(default=0) # TODO: change to float
+    qnt_itens = models.IntegerField(default=0) 
     data_emissao = models.DateTimeField('date published')
+    # TODO: Add link field
