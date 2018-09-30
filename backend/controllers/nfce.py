@@ -7,15 +7,13 @@ from django.views.decorators.csrf import csrf_exempt
 from backend.models import compra
 from .OxCrawler import *
 
-import json
-
 def decodeNfce(link):
     ox = OxCrawler(link)
     return {
         'cnpj': ox.get_cnpj(), 
         'emission_date': ox.get_emission_date(),
         'qnt_values': sum(ox.get_items_total_amount()),
-        'total_value': ox.get_total_value(),
+        'total_value': float(ox.get_total_value()),
         'descriptions': ox.get_items_description(),
     }
 
@@ -33,9 +31,10 @@ class Nfce(View):
         json_array = []
         for i in compras:
             json_array.append({
+                'id_da_compra': i.id,
                 'cpf_do_comprador': i.id_comprador,
                 'cnpj': i.cnpj,
-                'valor': i.valor,
+                'valor': float(i.valor),
                 'qnt_itens': i.qnt_itens,
                 'data_emissao': i.data_emissao
             })
@@ -45,13 +44,15 @@ class Nfce(View):
     def post(self, request):
         cpf = request.POST.get('cpf')
         link = request.POST.get('link')
+        if compra.objects.filter(url=link).exists():
+            return JsonResponse({'error': 'link already used', 'code': 404 })
         json = decodeNfce(link)
         buy = compra(
             id_comprador=cpf,
             cnpj=json.get('cnpj'),
-            valor=int(float(json.get('total_value'))), # TODO: use just float
+            valor=json.get('total_value'),
             qnt_itens=json.get('qnt_values'),
+            url=link,
             data_emissao=json.get('emission_date'))
         buy.save()
-        print(compra.objects.all())
         return JsonResponse(json)
