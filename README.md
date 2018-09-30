@@ -8,3 +8,7 @@ To make the Postgres setup on your machine, follow the steps on this link: https
 `$ psql -d hackathonrecife -f ./create.sql`
 
 `$ python manage.py runserver`
+
+# How to deploy app
+
+Follow the steps to upload the code in `App.js` in the link: https://expo.io/learn
